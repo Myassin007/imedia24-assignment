@@ -1,0 +1,19 @@
+stages:
+  - build
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_BUILD_CACHE: "$CI_PROJECT_DIR/.gradle"
+
+before_script:
+  - apt-get update -qy
+  - apt-get install -y openjdk-11-jdk
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble
+    - ./gradlew test
+  artifacts:
+    paths:
+      - build/libs/*.jar

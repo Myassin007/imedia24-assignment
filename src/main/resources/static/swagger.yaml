@@ -1,0 +1,129 @@
+swagger: "2.0"
+info:
+  title: Sample API
+  description: API description in Markdown.
+  version: 1.0.0
+host: localhost:8000
+schemes:
+  - http
+paths:
+  /products/{sku}:
+    get:
+      summary: Get product by SKU
+      description: Get details for a product by SKU.
+      produces:
+        - application/json;charset=utf-8
+      parameters:
+        - name: sku
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/ProductResponse"
+        404:
+          description: Not Found
+
+  /products:
+    get:
+      summary: Get products by SKUs
+      description: Get details for multiple products by SKUs.
+      produces:
+        - application/json;charset=utf-8
+      parameters:
+        - name: skus
+          in: query
+          required: true
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ProductResponse"
+        404:
+          description: Not Found
+
+    post:
+      summary: Add a new product
+      description: Add a new product to the inventory.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - application/json;charset=utf-8
+      parameters:
+        - name: productRequest
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ProductRequest"
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/ProductResponse"
+
+    patch:
+      summary: Partially update a product
+      description: Partially update the details of a product by SKU.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - application/json;charset=utf-8
+      parameters:
+        - name: sku
+          in: path
+          required: true
+          type: string
+        - name: partialProductRequest
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/PartialProductRequest"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/ProductResponse"
+        404:
+          description: Not Found
+
+definitions:
+  ProductRequest:
+    type: object
+    properties:
+      sku:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
+
+  PartialProductRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
+
+  ProductResponse:
+    type: object
+    properties:
+      sku:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
